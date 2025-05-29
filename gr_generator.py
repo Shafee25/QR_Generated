@@ -1,1 +1,2 @@
+# QR Generator Project
 print("Welcome to the QR Code Generator Practical Session")
