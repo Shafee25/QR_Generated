@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced QR Code Generator</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts for a nicer look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- QR Code Styling Library -->
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+    <style>
+        /* Custom styles to enhance the UI */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .control-panel::-webkit-scrollbar {
+            width: 5px;
+        }
+        .control-panel::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .control-panel::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        /* Style for file input button */
+        .file-input-button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .file-input-button:hover {
+            background-color: #4338ca;
+        }
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-800">Advanced QR Code Generator</h1>
+            <p class="mt-2 text-lg text-gray-600">Create beautiful, branded QR codes in seconds.</p>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Left Panel: Customization Controls -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-xl h-fit sticky top-8 control-panel overflow-y-auto" style="max-height: 90vh;">
+                <h2 class="text-2xl font-semibold text-gray-700 border-b pb-4">Customize Your QR Code</h2>
+                
+                <div class="space-y-6 mt-6">
+                    <!-- Section 1: Content -->
+                    <div>
+                        <label for="url-input" class="block text-sm font-medium text-gray-700 mb-1">URL or Text</label>
+                        <input type="text" id="url-input" value="https://www.google.com" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- Section 2: Logo -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Logo (Optional)</label>
+                        <div class="flex items-center space-x-4">
+                             <label for="logo-upload" class="file-input-button">
+                                Choose File
+                            </label>
+                            <input type="file" id="logo-upload" accept="image/png, image/jpeg, image/svg+xml">
+                            <span id="logo-filename" class="text-sm text-gray-500 truncate">No file chosen...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 3: Frame -->
+                    <div>
+                        <label for="frame-text-input" class="block text-sm font-medium text-gray-700 mb-1">Frame Text (e.g., "SCAN ME")</label>
+                        <input type="text" id="frame-text-input" placeholder="SCAN ME!" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition">
+                         <div class="grid grid-cols-2 gap-4 mt-2">
+                             <div>
+                                <label for="frame-color-input" class="block text-sm font-medium text-gray-700 mb-1">Frame Color</label>
+                                <input type="color" id="frame-color-input" value="#000000" class="w-full h-10 p-1 border border-gray-300 rounded-md cursor-pointer">
+                             </div>
+                             <div>
+                                <label for="frame-text-color-input" class="block text-sm font-medium text-gray-700 mb-1">Text Color</label>
+                                <input type="color" id="frame-text-color-input" value="#ffffff" class="w-full h-10 p-1 border border-gray-300 rounded-md cursor-pointer">
+                             </div>
+                         </div>
+                    </div>
+
+                    <!-- Section 4: Colors -->
+                    <div>
+                        <h3 class="text-md font-medium text-gray-700 mb-2 border-t pt-4">QR Colors</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                               <label for="dot-color-input" class="block text-sm font-medium text-gray-700 mb-1">Dots</label>
+                               <input type="color" id="dot-color-input" value="#000000" class="w-full h-10 p-1 border border-gray-300 rounded-md cursor-pointer">
+                            </div>
+                            <div>
+                               <label for="bg-color-input" class="block text-sm font-medium text-gray-700 mb-1">Background</label>
+                               <input type="color" id="bg-color-input" value="#ffffff" class="w-full h-10 p-1 border border-gray-300 rounded-md cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Section 5: Download -->
+                    <div class="border-t pt-6">
+                        <button id="download-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-green-700 transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Download QR Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: QR Code Preview -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-xl flex items-center justify-center min-h-[400px] lg:min-h-0">
+                <div id="canvas-container" class="transform transition-all duration-300">
+                    <!-- QR Code will be rendered here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-12 text-gray-500 text-sm">
+            <p>Built with ❤️ using modern web technologies.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Element References ---
+            const urlInput = document.getElementById('url-input');
+            const logoUpload = document.getElementById('logo-upload');
+            const logoFilename = document.getElementById('logo-filename');
+            
+            const frameTextInput = document.getElementById('frame-text-input');
+            const frameColorInput = document.getElementById('frame-color-input');
+            const frameTextColorInput = document.getElementById('frame-text-color-input');
+
+            const dotColorInput = document.getElementById('dot-color-input');
+            const bgColorInput = document.getElementById('bg-color-input');
+            
+            const downloadBtn = document.getElementById('download-btn');
+            const canvasContainer = document.getElementById('canvas-container');
+
+            let logoUrl = null;
+
+            // --- QR Code Styling Instance ---
+            const qrCode = new QRCodeStyling({
+                width: 300,
+                height: 300,
+                type: 'svg',
+                data: urlInput.value,
+                image: logoUrl,
+                dotsOptions: {
+                    color: dotColorInput.value,
+                    type: 'rounded'
+                },
+                backgroundOptions: {
+                    color: bgColorInput.value,
+                },
+                imageOptions: {
+                    crossOrigin: 'anonymous',
+                    margin: 10,
+                    imageSize: 0.3
+                },
+                cornersSquareOptions: {
+                    type: "extra-rounded"
+                },
+                cornersDotOptions: {
+                    type: "dot"
+                }
+            });
+
+            // --- Initial Render ---
+            qrCode.append(canvasContainer);
+
+            // --- Function to Update QR Code ---
+            const updateQrCode = () => {
+                const options = {
+                    data: urlInput.value,
+                    image: logoUrl,
+                    dotsOptions: {
+                        color: dotColorInput.value
+                    },
+                    backgroundOptions: {
+                        color: bgColorInput.value
+                    }
+                };
+                
+                const frameText = frameTextInput.value;
+                if(frameText) {
+                    options.qrOptions = { errorCorrectionLevel: 'H' }; // High correction needed for logos/frames
+                    options.frameOptions = {
+                        text: frameText,
+                        color: frameColorInput.value,
+                        textColor: frameTextColorInput.value,
+                        font: "bold 22px Inter, sans-serif"
+                    };
+                    // dynamically adjust width and height when frame is added
+                    qrCode.update({ width: 340, height: 420 });
+                } else {
+                     qrCode.update({ width: 300, height: 300, frameOptions: null });
+                }
+
+                qrCode.update(options);
+            };
+
+            // --- Event Listeners ---
+            urlInput.addEventListener('input', updateQrCode);
+            dotColorInput.addEventListener('input', updateQrCode);
+            bgColorInput.addEventListener('input', updateQrCode);
+            frameTextInput.addEventListener('input', updateQrCode);
+            frameColorInput.addEventListener('input', updateQrCode);
+            frameTextColorInput.addEventListener('input', updateQrCode);
+
+            logoUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) {
+                    logoUrl = null;
+                    logoFilename.textContent = 'No file chosen...';
+                    updateQrCode();
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    logoUrl = reader.result;
+                    logoFilename.textContent = file.name;
+                    updateQrCode();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            downloadBtn.addEventListener('click', () => {
+                 qrCode.download({ name: 'custom-qr-code', extension: 'png' });
+            });
+        });
+    </script>
+</body>
+</html>
